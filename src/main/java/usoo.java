@@ -18,7 +18,7 @@ public class usoo {
 		List<Persona> Personas=new ArrayList<Persona>();
 		List<Partido> Partidos = new ArrayList<Partido>();
 		List<Pronostico> pronosticos = new ArrayList<Pronostico>();
-		int numRonda = 1;
+		
 		int ron=1;
 		List<Ronda> rondas = new ArrayList<Ronda>();
 		Path ARCHIVO = Paths.get("partidos.txt");
@@ -28,7 +28,7 @@ public class usoo {
 		int j=0;
 		
 		while(j<div.length) {
-			numRonda= Integer.parseInt(div[j]);	
+		int	numRonda= Integer.parseInt(div[j]);	
 			String equi1 = div[j+1];
 			String equi2 = div[j+2];
 			int gol1= Integer.parseInt(div[j+3]);
@@ -36,43 +36,42 @@ public class usoo {
 			Equipo equipo1=new Equipo(equi1);
 			Equipo equipo2=new Equipo(equi2);
 			Partidos.add(new Partido(equipo1,equipo2,gol1,gol2));
-			j=j+5;
-			if(numRonda!=ron) {
+			if(numRonda!=ron||j+6>div.length) {
 				rondas.add(new Ronda(numRonda-1,Partidos));
 				ron++;
 				Partidos.clear();
 			}
+			j=j+5;	
 			
-		}
-
-		archi=null;
-		String div1[]=null;
-		div1=dividir(ARCHIVO2,archi);
-		j=0;
-		List<Partido> pa = new ArrayList<Partido>();
 		
+		}
+		archi=null;
+		div=null;
+		div=dividir(ARCHIVO2,archi);
+		j=0;
 		Partido p;
+		String con=div[j+4];
 		while(j<div.length) {
-			String nom = div1[j];
-			int ronda= Integer.parseInt(div1[j+1]);
-			int par= Integer.parseInt(div1[j+2]);
-			int pron= Integer.parseInt(div1[j+3]);
-			pa=rondas.get(ronda-1).getPartidos();
+			String nom = div[j];
+			int ronda= Integer.parseInt(div[j+1]);
+			int par= Integer.parseInt(div[j+2]);
+			int pron= Integer.parseInt(div[j+3]);
+			List<Partido> pa = rondas.get(ronda-1).partidos;
 			p=pa.get(par-1);
-			
-			pronosticos.add(new Pronostico(p,pron));
-			
-			
-			if(!nom.equals(div1[j+4])||div1[j+4].equals(null)) {
+			pronosticos.add(new Pronostico(p,pron));	
+			System.out.print("HOLAA ");
+			if(!nom.equals(con)) {
 				Personas.add(new Persona(nom,pronosticos));
+				con=div[j+4];
 				pronosticos.clear();
-			
+				System.out.print("EXITO ");
 			}
 			j=j+4;
 			}
 		
 		calcularSalida(Personas);
 		mostrarFINL(Personas);
+		
 		
 		}
 	
